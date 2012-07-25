@@ -199,10 +199,37 @@ int do_enable(const std::vector<std::string>& args)
     return svc->Enable();
 }
 
+#define MAX_PARAMETERS 64
 int do_exec(const std::vector<std::string>& args) {
     Service* svc = ServiceManager::GetInstance().MakeExecOneshotService(args);
     if (!svc) {
-        return -1;
+        pid_t pid;
+        int status, i, j;
+        char *par[MAX_PARAMETERS];
+    
+        if (nargs > MAX_PARAMETERS)
+        {
+            return -1;
+        }
+    
+        for(i=0, j=1; i<(nargs-1) ;i++,j++)
+        {
+            par[i] = args[j];
+        }
+    
+        par[i] = (char*)0;
+        pid = fork();
+        if (!pid)
+        {
+            execv(par[0],par);
+        }
+        else
+        {
+            while(wait(&status)!=pid);
+        }
+    
+        return 0;
+
     }
     if (!svc->Start()) {
         return -1;
