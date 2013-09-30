@@ -101,6 +101,8 @@ LOCAL_POST_INSTALL_CMD := $(hide) mkdir -p $(TARGET_ROOT_OUT)/sbin; \
     ln -sf ../init $(TARGET_ROOT_OUT)/sbin/watchdogd
 
 LOCAL_CLANG := true
+
+
 include $(BUILD_EXECUTABLE)
 
 

@@ -54,6 +54,7 @@ static const char *firmware_dirs[] = { "/etc/firmware",
                                        "/firmware/image" };
 
 extern struct selabel_handle *sehandle;
+extern char bootdevice[32];
 
 static int device_fd = -1;
 
@@ -515,6 +516,10 @@ static char **get_block_device_symlinks(struct uevent *uevent)
         link_num++;
     else
         links[link_num] = NULL;
+
+    if (!strncmp(device, bootdevice, sizeof(bootdevice))) {
+        make_link(link_path, "/dev/block/bootdevice");
+    }
 
     return links;
 }

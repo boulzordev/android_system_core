@@ -72,6 +72,8 @@ struct selabel_handle *sehandle_prop;
 static int property_triggers_enabled = 0;
 
 static char qemu[32];
+char bootdevice[32];
+
 
 int have_console;
 std::string console_name = "/dev/console";
@@ -343,6 +345,8 @@ static void import_kernel_nv(const std::string& key, const std::string& value, b
 
     if (key == "qemu") {
         strlcpy(qemu, value.c_str(), sizeof(qemu));
+    } else if (key == "androidboot.bootdevice"){
+        strlcpy(bootdevice, value.c_str(), sizeof(bootdevice));
     } else if (android::base::StartsWith(key, "androidboot.")) {
         property_set(android::base::StringPrintf("ro.boot.%s", key.c_str() + 12).c_str(),
                      value.c_str());
