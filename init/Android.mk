@@ -93,7 +93,8 @@ LOCAL_STATIC_LIBRARIES := \
     libselinux \
     libmincrypt \
     libc++_static \
-    libdl
+    libdl \
+	libz
 
 # Create symlinks
 LOCAL_POST_INSTALL_CMD := $(hide) mkdir -p $(TARGET_ROOT_OUT)/sbin; \
@@ -101,6 +102,9 @@ LOCAL_POST_INSTALL_CMD := $(hide) mkdir -p $(TARGET_ROOT_OUT)/sbin; \
     ln -sf ../init $(TARGET_ROOT_OUT)/sbin/watchdogd
 
 LOCAL_CLANG := true
+
+LOCAL_C_INCLUDES += external/zlib
+
 include $(BUILD_EXECUTABLE)
 
 
