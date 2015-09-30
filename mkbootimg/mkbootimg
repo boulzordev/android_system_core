@@ -55,7 +55,11 @@ def write_header(args):
         args.base + args.second_offset,                 # physical load addr
         args.base + args.tags_offset,                   # physical addr for kernel tags
         args.pagesize))                                 # flash page size we assume
-    args.output.write(pack('8x'))                       # future expansion: should be 0
+    if args.dt:
+        args.output.write(pack('I', filesize(args.dt)))
+        args.output.write(pack('4x'))
+    else:
+        args.output.write(pack('8x'))                   # future expansion: should be 0
     args.output.write(pack('16s', args.board.encode())) # asciiz product name
     args.output.write(pack('512s', args.cmdline[:512].encode()))
 
@@ -63,6 +67,8 @@ def write_header(args):
     update_sha(sha, args.kernel)
     update_sha(sha, args.ramdisk)
     update_sha(sha, args.second)
+    if args.dt:
+        update_sha(sha, args.dt)
     img_id = pack('32s', sha.digest())
 
     args.output.write(img_id)
@@ -115,6 +121,7 @@ def parse_cmdline():
                         maxlen=16)
     parser.add_argument('--pagesize', help='page size', type=parse_int,
                         choices=[2**i for i in range(11,15)], default=2048)
+    parser.add_argument('--dt', help='dt file', type=FileType('rb'))
     parser.add_argument('--id', help='print the image ID on standard output',
                         action='store_true')
     parser.add_argument('-o', '--output', help='output file name', type=FileType('wb'),
@@ -126,6 +133,8 @@ def write_data(args):
     write_padded_file(args.output, args.kernel, args.pagesize)
     write_padded_file(args.output, args.ramdisk, args.pagesize)
     write_padded_file(args.output, args.second, args.pagesize)
+    if args.dt:
+        write_padded_file(args.output, args.dt, args.pagesize)
 
 
 def main():
