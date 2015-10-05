@@ -223,6 +223,7 @@ int __android_log_loggable(int prio, const char *tag)
 #else
     /* no system property routines, fallback to a default */
     nprio = prio_fallback;
+    (void)tag;
 #endif
 
     return ((prio >= nprio) ? 1 : 0);
