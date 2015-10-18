@@ -44,6 +44,9 @@ private:
     char *mParams[NL_PARAMS_MAX];
 
 public:
+    const static int NlActionAdd;
+    const static int NlActionRemove;
+
     NetlinkEvent();
     virtual ~NetlinkEvent();
 

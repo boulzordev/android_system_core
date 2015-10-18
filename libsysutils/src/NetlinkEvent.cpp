@@ -47,6 +47,9 @@ const int LOCAL_NFLOG_PACKET = NFNL_SUBSYS_ULOG << 8 | NFULNL_MSG_PACKET;
 #include <netlink/handlers.h>
 #include <netlink/msg.h>
 
+const int NetlinkEvent::NlActionAdd = (const int)NetlinkEvent::Action::kAdd;
+const int NetlinkEvent::NlActionRemove = (const int)NetlinkEvent::Action::kRemove;
+
 NetlinkEvent::NetlinkEvent() {
     mAction = Action::kUnknown;
     memset(mParams, 0, sizeof(mParams));
